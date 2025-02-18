@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Raleway:wght@300;500;700&display=swap');
+
+body {
+    font-family: 'Raleway', sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc, #00b35f);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Changer pour aligner au haut de la page */
+    height: 100vh;
+    overflow: hidden;
+    /* Désactive le défilement global */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+header {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    animation: slideDown 1s ease-out;
+}
+
+#logo1fo {
+    height: 90px;
+  
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+main {
+    width: 100%;
+    max-height: calc(100vh - 100px);
+    /* Laisser de l'espace pour l'entête */
+    overflow-y: auto;
+    /* Permet de défiler toute la page */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#task-form {
+    margin: 0 auto 20px; 
+    width: 100%; 
+    max-width: 600px; 
+    padding: 0 20px; 
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input,
+select,
+button {
+    margin: 10px 0;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+input,
+select {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-family: 'Raleway', sans-serif;
+}
+
+button {
+    background: #ff758c;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+    animation: bounceIn 1s ease-out;
+}
+
+@keyframes bounceIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+button:hover {
+    background: #e84a5f;
+    transform: scale(1.1);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Kanban container */
+#kanban {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Style pour chaque colonne de tâches */
+.task-column {
+    flex: 1;
+    /* Chaque colonne occupe une portion égale de l'espace disponible */
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: 500px;
+    /* Hauteur minimale pour les colonnes */
+}
+
+/* Titre des colonnes */
+.task-column h3 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+/* Colonnes Kanban */
+.kanban-column {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    width: 30%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.kanban-column h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+/* Tâches */
+.task-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Raleway', sans-serif;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.todo .status {
+    background-color: #ffbb33;
+}
+
+.in-progress .status {
+    background-color: #ff758c;
+}
+
+.done .status {
+    background-color: #4caf50;
+}
+
+.task-container {
+    margin-top: 20px;
+}
+
+/* Style pour le bouton de suppression */
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    background-color: #e04343;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #f44336;
+    /* Couleur rouge pour la corbeille */
+    font-size: 16px;
+    /* Taille de l'icône */
+    cursor: pointer;
+}
+
+
+.delete-btn:hover {
+    color: #ffffff;
+    /* Couleur rouge plus foncée au survol */
+}
+
+/* .assign-to {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.assign-to select {
+    padding: 8px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    font-size: 14px;
+} */
+
+
+.assigned-person {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.assigned-person img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.assigned-person span {
+    font-size: 14px;
+}
+
+.assigned-person:hover {
+    background-color: #f0f0f0;
+}
+
