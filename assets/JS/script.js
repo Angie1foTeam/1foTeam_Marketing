@@ -4,6 +4,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const inProgressColumn = document.getElementById('in-progress-tasks');
     const doneColumn = document.getElementById('done-tasks');
 
+    // Fonction pour appliquer la couleur en fonction de la deadline
+    function getDeadlineColor(deadline) {
+        const currentDate = new Date(); // Date actuelle
+        const deadlineDate = new Date(deadline);
+
+        // Comparaison des dates pour déterminer la couleur
+        if (deadlineDate < currentDate) {
+            return 'overdue'; // Deadline passée
+        } else if ((deadlineDate - currentDate) <= 3 * 24 * 60 * 60 * 1000) { // Moins de 3 jours
+            return 'urgent'; // Tâche urgente (moins de 3 jours)
+        } else {
+            return 'on-time'; // Tâche à temps
+        }
+    }
+
     // Fonction pour afficher les tâches en fonction de leur statut
     function displayTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -16,6 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
         tasks.forEach((task, index) => {
             const taskItem = document.createElement('div');
             taskItem.classList.add('task-item', task.status);
+
+            // Appliquer la couleur de la tâche en fonction de la deadline
+            const deadlineColor = getDeadlineColor(task.deadline);
+            taskItem.classList.add(deadlineColor); // Ajouter la classe pour la couleur
+
             taskItem.setAttribute('draggable', 'true'); // Rendre la tâche déplaçable
             taskItem.dataset.index = index; // Ajouter l'index de la tâche pour la retrouver lors du déplacement
 
@@ -26,10 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
             taskStatusElem.textContent = task.status;
             taskStatusElem.classList.add('status');
 
-            // Créer le select pour l'attribution de la tâche avec les options d'images
+            // Créer le select pour l'attribution de la tâche
             const assignTo = document.createElement('div');
             assignTo.classList.add('assign-to');
-            assignTo.innerHTML = `
+            assignTo.innerHTML = ` 
                 <label>Attribué à :</label>
                 <select class="assign-select">
                     <option value="person1" ${task.assignedTo === 'person1' ? 'selected' : ''}>
@@ -44,16 +64,16 @@ document.addEventListener('DOMContentLoaded', function () {
             // Écouter les changements dans le select d'attribution et mettre à jour le localStorage
             const assignSelect = assignTo.querySelector('.assign-select');
             assignSelect.addEventListener('change', function () {
-                task.assignedTo = assignSelect.value; // Mettre à jour l'attribution
+                task.assignedTo = assignSelect.value;
                 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-                tasks[index] = task; // Mettre à jour la tâche dans le tableau
-                localStorage.setItem('tasks', JSON.stringify(tasks)); // Sauvegarder dans le localStorage
-                displayTasks(); // Rafraîchir l'affichage
+                tasks[index] = task;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                displayTasks();
             });
 
-            // Créer le bouton avec une icône (par exemple une icône de corbeille)
+            // Créer le bouton de suppression
             const deleteButton = document.createElement('button');
-            deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';  // Icône corbeille de Font Awesome
+            deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
             deleteButton.classList.add('delete-btn');
             deleteButton.addEventListener('click', function () {
                 const confirmed = window.confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');
@@ -64,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             taskItem.appendChild(taskTitleElem);
             taskItem.appendChild(taskStatusElem);
-            taskItem.appendChild(assignTo); // Ajouter le select d'attribution
-            taskItem.appendChild(deleteButton); // Ajouter le bouton de suppression
+            taskItem.appendChild(assignTo);
+            taskItem.appendChild(deleteButton);
 
             // Ajouter la tâche à la colonne appropriée
             if (task.status === 'todo') {
@@ -77,24 +97,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Ajouter les événements de drag-and-drop
-            taskItem.addEventListener('dragstart', function (e) {
-                e.dataTransfer.setData('text', taskItem.dataset.index); // Stocker l'index de la tâche
-            });
+            addDragAndDropEvents(taskItem);
+
+            // Vérifier si la tâche est en retard et envoyer une notification si oui
+            checkForDeadlineNotification(task, index);
         });
 
         // Ajouter les événements de drop pour chaque colonne
         [todoColumn, inProgressColumn, doneColumn].forEach(column => {
             column.addEventListener('dragover', function (e) {
-                e.preventDefault(); // Permettre le drop
+                e.preventDefault();
             });
 
             column.addEventListener('drop', function (e) {
                 e.preventDefault();
-                const taskIndex = e.dataTransfer.getData('text'); // Récupérer l'index de la tâche
+                const taskIndex = e.dataTransfer.getData('text');
                 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
                 const task = tasks[taskIndex];
 
-                // Mettre à jour le statut de la tâche selon la colonne cible
                 if (column === todoColumn) {
                     task.status = 'todo';
                 } else if (column === inProgressColumn) {
@@ -103,19 +123,41 @@ document.addEventListener('DOMContentLoaded', function () {
                     task.status = 'done';
                 }
 
-                tasks[taskIndex] = task; // Mettre à jour la tâche dans le tableau
-                localStorage.setItem('tasks', JSON.stringify(tasks)); // Sauvegarder dans le localStorage
-                displayTasks(); // Rafraîchir l'affichage
+                tasks[taskIndex] = task;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                displayTasks();
             });
         });
+    }
+
+    // Fonction pour ajouter les événements drag-and-drop
+    function addDragAndDropEvents(taskItem) {
+        taskItem.addEventListener('dragstart', function (e) {
+            e.dataTransfer.setData('text', taskItem.dataset.index);
+        });
+    }
+
+    // Fonction pour vérifier la date limite et envoyer une notification
+    function checkForDeadlineNotification(task, index) {
+        const currentDate = new Date();
+        const deadlineDate = new Date(task.deadline);
+
+        if (deadlineDate <= currentDate && task.status !== 'done') {
+            if (Notification.permission === "granted") {
+                new Notification("Tâche en retard", {
+                    body: `La tâche "${task.title}" est arrivée à échéance.`,
+                    icon: 'assets/IMG/logo1fo.png'
+                });
+            }
+        }
     }
 
     // Fonction pour supprimer une tâche
     function deleteTask(index) {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.splice(index, 1); // Supprimer la tâche à l'index spécifié
-        localStorage.setItem('tasks', JSON.stringify(tasks)); // Sauvegarder les tâches mises à jour
-        displayTasks(); // Mettre à jour l'affichage
+        tasks.splice(index, 1);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        displayTasks();
     }
 
     // Afficher les tâches au chargement
@@ -127,15 +169,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const taskTitle = document.getElementById('task-title').value;
         const taskStatus = document.getElementById('task-status').value;
+        const taskDeadline = document.getElementById('task-deadline').value;
+        const taskPriority = document.getElementById('task-priority').value;
 
         const newTask = {
             title: taskTitle,
             status: taskStatus,
-            assignedTo: 'person1' // Par défaut, attribuer à Angie
+            deadline: taskDeadline,
+            assignedTo: 'person1', // Par défaut, attribuer à Angie
+            priority: taskPriority
         };
 
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.push(newTask);
+        tasks.unshift(newTask); // Ajouter la nouvelle tâche en haut de la liste
 
         localStorage.setItem('tasks', JSON.stringify(tasks));
 
@@ -143,4 +189,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         displayTasks(); // Rafraîchir l'affichage
     });
+
+
+
+
+
+
+
 });

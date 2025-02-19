@@ -92,8 +92,23 @@ button {
     transition: all 0.3s;
 }
 
-input,
 select {
+    background-color: rgba(255, 255, 255, 0.2); 
+    color: white; /* Texte en blanc */
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Raleway', sans-serif;
+}
+
+
+select option {
+    background-color: #333; 
+    color: white; 
+}
+
+input {
     background: rgba(255, 255, 255, 0.2);
     color: #fff;
     font-family: 'Raleway', sans-serif;
@@ -278,4 +293,97 @@ button:hover {
 .assigned-person:hover {
     background-color: #f0f0f0;
 }
+
+::placeholder {
+    color: #fff
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Code couleur dynamique pour les tâches */
+.task-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Raleway', sans-serif;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-deadline {
+    font-size: 14px;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.task-urgency {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+}
+
+
+
+/* Style pour le bouton de suppression */
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    background-color: #e04343;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #f44336;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+
+.task-item.overdue {
+    background-color: rgba(255, 0, 0, 0.151); /* Tâche en retard (rouge) */
+}
+
+.task-item.urgent {
+    background-color: rgba(255, 166, 0, 0.438); /* Tâche urgente (orange) */
+}
+
+.task-item.on-time {
+    background-color: rgba(0, 255, 0, 0.24); /* Tâche à temps (vert) */
+}
+
+
+
+
+
+
+
+
 

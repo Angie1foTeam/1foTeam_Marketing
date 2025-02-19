@@ -19,17 +19,30 @@
         <!-- Section d'ajout de tâche en haut -->
         <section id="task-form">
             <h2>Ajouter une tâche</h2>
-            <form>
+            <form id="add-task-form">
                 <input type="text" id="task-title" placeholder="Titre de la tâche" required>
+
                 <select id="task-status">
                     <option value="todo">À faire</option>
                     <option value="in-progress">En cours</option>
                     <option value="done">Terminé</option>
                 </select>
+
+                <input type="date" id="task-deadline"> <!-- Ajout du champ pour la deadline -->
+
+                <select id="task-priority">
+                    <option value="low">🟢 Faible</option>
+                    <option value="medium">🟠 Moyenne</option>
+                    <option value="high">🔴 Élevée</option>
+                </select>
+
                 <button type="submit">Ajouter</button>
             </form>
         </section>
 
+
+
+    
         <!-- Tableau Kanban prenant toute la surface restante -->
         <section id="kanban">
             <div id="todo-tasks" class="task-column">
