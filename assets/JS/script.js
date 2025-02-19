@@ -163,21 +163,43 @@ document.addEventListener('DOMContentLoaded', function () {
     // Afficher les tâches au chargement
     displayTasks();
 
-    // Gestion de la soumission du formulaire
-    form.addEventListener('submit', function (e) {
+    // Ouvrir la modal
+    const openModalBtn = document.getElementById('openModalBtn');
+    const taskModal = document.getElementById('taskModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    openModalBtn.addEventListener('click', () => {
+        taskModal.style.display = 'block';
+    });
+
+    // Fermer la modal
+    closeModalBtn.addEventListener('click', () => {
+        taskModal.style.display = 'none';
+    });
+
+    // Fermer la modal si l'utilisateur clique à l'extérieur de la modal
+    window.addEventListener('click', (e) => {
+        if (e.target === taskModal) {
+            taskModal.style.display = 'none';
+        }
+    });
+
+    // Ajouter une tâche via la modal
+    const taskForm = document.getElementById('taskForm');
+
+    taskForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const taskTitle = document.getElementById('task-title').value;
-        const taskStatus = document.getElementById('task-status').value;
-        const taskDeadline = document.getElementById('task-deadline').value;
-        const taskPriority = document.getElementById('task-priority').value;
+        const title = document.getElementById('taskTitle').value;
+        const deadline = document.getElementById('taskDeadline').value;
+        const priority = document.getElementById('taskPriority').value;
 
         const newTask = {
-            title: taskTitle,
-            status: taskStatus,
-            deadline: taskDeadline,
+            title: title,
+            status: 'todo', // Nouvelle tâche commencée comme "todo"
+            deadline: deadline,
             assignedTo: 'person1', // Par défaut, attribuer à Angie
-            priority: taskPriority
+            priority: priority
         };
 
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -185,15 +207,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         localStorage.setItem('tasks', JSON.stringify(tasks));
 
-        form.reset();
-
+        taskForm.reset(); // Réinitialiser le formulaire
         displayTasks(); // Rafraîchir l'affichage
+
+        taskModal.style.display = 'none'; // Fermer la modal
     });
-
-
-
-
-
-
-
 });

@@ -16,8 +16,8 @@
     </header>
 
     <main>
-        <!-- Section d'ajout de tâche en haut -->
-        <section id="task-form">
+
+        <!-- <section id="task-form">
             <h2>Ajouter une tâche</h2>
             <form id="add-task-form">
                 <input type="text" id="task-title" placeholder="Titre de la tâche" required>
@@ -28,7 +28,7 @@
                     <option value="done">Terminé</option>
                 </select>
 
-                <input type="date" id="task-deadline"> <!-- Ajout du champ pour la deadline -->
+                <input type="date" id="task-deadline"> 
 
                 <select id="task-priority">
                     <option value="low">🟢 Faible</option>
@@ -38,24 +38,46 @@
 
                 <button type="submit">Ajouter</button>
             </form>
-        </section>
+        </section> -->
+
+        <div class="center-content">
+            <h1>Gestion de contenu Marketing</h1>
+
+            <button id="openModalBtn"><i class="fas fa-plus"></i> Ajouter une Tâche</button>
+        </div>
+
+        <!-- Modal add -->
+        <div id="taskModal" class="modal">
+            <div class="modal-content">
+                <span id="closeModalBtn" class="close-btn">&times;</span>
+                <h2>Ajouter une Tâche</h2>
+                <form id="taskForm">
+                    <input type="text" id="taskTitle" placeholder="Titre de la tâche" required>
+                    <input type="date" id="taskDeadline" placeholder="Date d'échéance">
+                    <select id="taskPriority">
+                        <option value="low">Faible</option>
+                        <option value="medium">Moyenne</option>
+                        <option value="high">Haute</option>
+                    </select>
+                    <button type="submit">Ajouter</button>
+                </form>
+            </div>
+        </div>
 
 
-
-    
-        <!-- Tableau Kanban prenant toute la surface restante -->
+        <!-- Tableau Kanban -->
         <section id="kanban">
             <div id="todo-tasks" class="task-column">
                 <h3>À faire</h3>
-                <!-- Les tâches à faire seront ici -->
+                <!-- Les tâches à faire -->
             </div>
             <div id="in-progress-tasks" class="task-column">
                 <h3>En cours</h3>
-                <!-- Les tâches en cours seront ici -->
+                <!-- Les tâches en cours -->
             </div>
             <div id="done-tasks" class="task-column">
                 <h3>Terminé</h3>
-                <!-- Les tâches terminées seront ici -->
+                <!-- Les tâches terminées -->
             </div>
         </section>
     </main>
